@@ -8,28 +8,25 @@
 # limitations under the License.
 
 
-import urllib2
 import json
+import requests
 from google.appengine.ext import vendor
 vendor.add('lib')
 
 from flask import Flask
 app = Flask(__name__)
 
-from api_key import key
 
 # [START app]
 @app.route('/get_author/<title>')
 def get_author(title):
-    host = 'https://www.googleapis.com/books/v1/volumes?q={}&key={}&country=US'.format(title, key)
-    request = urllib2.Request(host)
+    host = 'https://www.googleapis.com/books/v1/volumes?q={}&key={}&country=US'.format(title, 'AIzaSyC8Haj_PJbYgCxTntiIsMW4iKT8XANP0SY')
     try:
-        response = urllib2.urlopen(request)
-    except urllib2.HTTPError, error:
-        contents = error.read()
-        print ('Received error from Books API {}'.format(contents))
-        return str(contents)
-    html = response.read()
+        request = requests.get(host)
+    except Exception as e:
+        print ('Received error from Books API {}'.format(e))
+        return
+    html = requests.text()
     author = json.loads(html)['items'][0]['volumeInfo']['authors'][0]
     return author
 # [END app]
