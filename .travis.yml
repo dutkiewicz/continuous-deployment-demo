@@ -10,7 +10,8 @@ before_deploy:
 jobs:
   include:
     - stage: test
-    - script: python test_main.py
+      name: "testing"
+      script: python test_main.py
 
 deploy:
   provider: gae
