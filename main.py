@@ -18,14 +18,13 @@ app = Flask(__name__)
 # [START app]
 @app.route('/get_author/<title>')
 def get_author(title):
-    host = 'https://www.googleapis.com/books/v1/volumes?q={}&key={}&country=US'.format(title, 'AIzaSyC8Haj_PJbYgCxTntiIsMW4iKT8XANP0SY')
+    host = 'https://www.googleapis.com/books/v1/volumes?q={}'.format(title)
     try:
-        request = requests.get(host)
+        response = requests.get(host)
     except Exception as e:
         print ('Received error from Books API {}'.format(e))
         return
-    html = requests.text()
-    author = json.loads(html)['items'][0]['volumeInfo']['authors'][0]
+    author = response.json()['items'][0]['volumeInfo']['authors'][0]
     return author
 # [END app]
 
